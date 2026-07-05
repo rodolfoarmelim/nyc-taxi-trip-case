@@ -181,7 +181,7 @@ GOLD_TABLE_METADATA = {
                 "table": "nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month", 
                 "schema": TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_HOUR_PER_MONTH_FULL
             },
-        "analysis_per_month": 
+        "analysis_per_month_per_color": 
             {
                 "table": "nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month_per_color", 
                 "schema": TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_MONTH_PER_COLOR
