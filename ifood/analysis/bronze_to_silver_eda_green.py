@@ -334,8 +334,8 @@ display(df_datas_silver_base.filter(col('duracao_minutos_floor') <= 0))
 # COMMAND ----------
 
 ### Verificando se temos datas com mês-ano de pickup diferente da partição do arquivo
-display(df_datas_silver_base.filter(col('ano_mes_dropoff') != col('year_month_file')).count())
-display(df_datas_silver_base.filter(col('ano_mes_dropoff') != col('year_month_file')).orderBy(col('ano_mes_dropoff').asc()))
+display(df_datas_silver_base.filter(col('ano_mes_pickup') != col('year_month_file')).count())
+display(df_datas_silver_base.filter(col('ano_mes_pickup') != col('year_month_file')).orderBy(col('ano_mes_pickup').asc()))
 
 # COMMAND ----------
 
@@ -384,7 +384,7 @@ df_consolidado = (df_resumo_pickup
 # 5. Exibe a tabela comparativa final
 display(df_consolidado)
 
-##### Temos grande parte dos casos armazenados onde a diferença entre os meses é nula, com alguns casos de 1. Vamos considerar o dropoff para sermos mais assertivos e remover casos onde a diferença de meses entre o arquivo e a data de dropoff é superior a 0, ou seja, itens que não são do mesmo mês
+##### Temos grande parte dos casos armazenados onde a diferença entre os meses é nula, com alguns casos de 1. Vamos considerar o pickup como referência e remover casos onde a diferença de meses entre o arquivo e a data de pickup é superior a 0, ou seja, itens que não são do mesmo mês
 
 # COMMAND ----------
 
@@ -395,7 +395,7 @@ display(df_consolidado)
 # MAGIC - Remover viagens onde a duração em minutos é <= 0 (corridas muito rápidas)
 # MAGIC - Remover viagens onde a duração da corrida é >= 1 dias
 # MAGIC - Remover viagens Trip distance <= 0
-# MAGIC - Remover viagens na qual a diferença absoluta entre os meses da referência do arquivo e data de dropoff > 0
+# MAGIC - Remover viagens na qual a diferença absoluta entre os meses da referência do arquivo e data de pickup > 0
 # MAGIC - Remover viagens em que o a contagem de passageiro é superior a 6 (brecha pelo volume encontrado)
 # MAGIC
 # MAGIC ##### Porque não remover casos de passenger count nulo ou 0?
@@ -408,10 +408,10 @@ display(df_consolidado)
 df_clean_logica = (df_datas_silver_base
     # Primeiro, criamos uma coluna temporária com o cálculo do desvio absoluto de meses do dropoff
     .withColumn("data_ref_arquivo", F.to_date(F.col("year_month_file"), "yyyy-MM"))
-    .withColumn("data_ref_dropoff", F.to_date(F.col("ano_mes_dropoff"), "yyyy-MM"))
+    .withColumn("data_ref_pickup", F.to_date(F.col("ano_mes_pickup"), "yyyy-MM"))
     .withColumn(
-        "desvio_absoluto_meses_dropoff", 
-        F.abs(F.round(F.months_between(F.col("data_ref_dropoff"), F.col("data_ref_arquivo")), 0)).cast("int")
+        "desvio_absoluto_meses_pickup", 
+        F.abs(F.round(F.months_between(F.col("data_ref_pickup"), F.col("data_ref_arquivo")), 0)).cast("int")
     )
     # Agora aplicamos todos os filtros em cadeia, incluindo o limite de desvio de meses
     .filter(
@@ -419,11 +419,11 @@ df_clean_logica = (df_datas_silver_base
         (F.col("duracao_minutos_floor") > 0) &                   # Remove duração em minutos <= 0
         (F.col("duracao_dias") < 1) &                            # Remove duração >= 1 dias
         (F.col("trip_distance") > 0) &                           # Remove trip_distance <= 0
-        (F.col("desvio_absoluto_meses_dropoff") <= 1)  &         # Remove desvios de meses superiores a 1
+        (F.col("desvio_absoluto_meses_pickup") = 0)  &         # Remove desvios de meses superiores a 1
         ((F.col("passenger_count") <= 6) | (F.col('passenger_count').isNull()))                          # Remove passageiros > 6          
     )
     # Removemos as colunas de data temporárias para não poluir o DataFrame final
-    .drop("data_ref_arquivo", "data_ref_dropoff", "desvio_absoluto_meses_dropoff")
+    .drop("data_ref_arquivo", "data_ref_dropoff", "desvio_absoluto_meses_pickup")
 )
 
 print(df_clean_logica.count())
@@ -760,12 +760,12 @@ df_aux = (df_green
     .withColumn("duracao_dias", F.col("duracao_segundos") / 86400)
     
     # 1.2. Cálculos de Data para o filtro de vazamento
-    .withColumn("ano_mes_dropoff", F.date_format("lpep_dropoff_datetime", "yyyy-MM"))
+    .withColumn("ano_mes_pickup", F.date_format("lpep_pickup_datetime", "yyyy-MM"))
     .withColumn("data_ref_arquivo", F.to_date(F.col("year_month_file"), "yyyy-MM"))
-    .withColumn("data_ref_dropoff", F.to_date(F.col("ano_mes_dropoff"), "yyyy-MM"))
+    .withColumn("data_ref_pickup", F.to_date(F.col("ano_mes_pickup"), "yyyy-MM"))
     .withColumn(
         "desvio_absoluto_meses", 
-        F.abs(F.round(F.months_between(F.col("data_ref_dropoff"), F.col("data_ref_arquivo")), 0)).cast("int")
+        F.abs(F.round(F.months_between(F.col("data_ref_pickup"), F.col("data_ref_arquivo")), 0)).cast("int")
     )
 )
 
@@ -775,7 +775,7 @@ df_clean_logica = (df_aux.filter(
         (F.col("duracao_minutos_floor") > 0) &                   # Remove duração <= 0
         (F.col("duracao_dias") < 1) &                            # Remove viagens de 1 dia ou mais
         (F.col("trip_distance") > 0) &                           # Distância válida
-        (F.col("desvio_absoluto_meses") <= 1) &                  # Tolerância de 1 mês no vazamento de arquivo
+        (F.col("desvio_absoluto_meses") = 0) &                  # Tolerância de 0 mês no vazamento de arquivo
         ((F.col('passenger_count') <= 6) | (F.col('passenger_count').isNull())) # Passageiros <= 6 ou nulo                    
     )
     # 1.4. Flag de Passageiros
@@ -868,7 +868,7 @@ print(f"-> Retenção Total: {(volume_final / volume_original) * 100:.2f}% dos d
 # MAGIC
 # MAGIC - **Distância Nula ou Negativa:** Remoção de viagens com trip_distance <= 0.
 # MAGIC
-# MAGIC - **Desvios Temporais (Vazamento de Partição):** Remoção de registros onde a diferença absoluta entre o mês/ano de referência do arquivo e a data real de dropoff seja > 0
+# MAGIC - **Desvios Temporais (Vazamento de Partição):** Remoção de registros onde a diferença absoluta entre o mês/ano de referência do arquivo e a data real de pickup seja > 0
 # MAGIC
 # MAGIC **Tratamento da Variável passenger_count**
 # MAGIC Existem inúmeras viagens na base que não reportaram a quantidade de passageiros (passenger_count nulo ou igual a 0), mas que apresentam dados financeiros (total_amount) positivos e perfeitamente válidos. Como a premissa do projeto é utilizar o total_amount como fonte da verdade para o faturamento, essas viagens não serão removidas. Em vez disso, será criada uma coluna de flag (sinalizador) para identificar se a corrida teve passageiros reportados ou não, preservando a integridade financeira do dataset.
