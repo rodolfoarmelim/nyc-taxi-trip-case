@@ -28,11 +28,11 @@ def create_table_gold_full_data(df):
     save_as_table_delta(df_final_gold, "overwrite", GOLD_TABLE_METADATA["full_analysis"]["table"], "pickup_time_year_month", formatted_partitions)
 
 
-def create_table_gold_analysis_per_hour_per_month(df):
+def create_table_gold_analysis_per_hour_per_month_full_full(df):
     """
-    Função que realiza as transformações e agrupamentos para criar a tabela nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month
+    Função que realiza as transformações e agrupamentos para criar a tabela nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month_full_full
     """
-    print(f"  -> [DATA PREP] Tratando e preparando os dados da tabela: {GOLD_TABLE_METADATA['analysis_per_hour_per_month']['table']}")
+    print(f"  -> [DATA PREP] Tratando e preparando os dados da tabela: {GOLD_TABLE_METADATA['analysis_per_hour_per_month_full']['table']}")
 
     df_gold_groupping = df.groupBy("taxi_color", "pickup_time_year_month", "pickup_time_hour")\
         .agg( \
@@ -47,24 +47,24 @@ def create_table_gold_analysis_per_hour_per_month(df):
 
     select_dinamico_expr = [
         F.col(col_name).cast(col_type) 
-        for col_name, col_type in GOLD_TABLE_METADATA["analysis_per_hour_per_month"]["schema"].items()
+        for col_name, col_type in GOLD_TABLE_METADATA["analysis_per_hour_per_month_full"]["schema"].items()
     ]
     
     df_final_gold_per_hour_per_month =  df_gold_groupping.select(*select_dinamico_expr)
 
     partition_list_pickup_year_month = [linha["pickup_time_year_month"] for linha in df_gold_groupping.select("pickup_time_year_month").distinct().orderBy("pickup_time_year_month").collect()]
 
-    print(f"  -> [ESCRITA] Salvando partição/ões {partition_list_pickup_year_month} na tabela Gold: {GOLD_TABLE_METADATA['analysis_per_hour_per_month']['table']}")
+    print(f"  -> [ESCRITA] Salvando partição/ões {partition_list_pickup_year_month} na tabela Gold: {GOLD_TABLE_METADATA['analysis_per_hour_per_month_full']['table']}")
 
     formatted_partitions = ", ".join([f"'{p}'" for p in partition_list_pickup_year_month])
 
-    save_as_table_delta(df_final_gold_per_hour_per_month, "overwrite", GOLD_TABLE_METADATA['analysis_per_hour_per_month']['table'], "pickup_time_year_month", formatted_partitions)
+    save_as_table_delta(df_final_gold_per_hour_per_month, "overwrite", GOLD_TABLE_METADATA['analysis_per_hour_per_month_full']['table'], "pickup_time_year_month", formatted_partitions)
 
-def create_table_gold_analysis_per_month(df):
+def create_table_gold_analysis_per_month_per_color(df):
     """
-    Função que realiza as transformações e agrupamentos para criar a tabela nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month
+    Função que realiza as transformações e agrupamentos para criar a tabela nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month_per_color
     """
-    print(f"  -> [DATA PREP] Tratando e preparando os dados da tabela: {GOLD_TABLE_METADATA['analysis_per_month']['table']}")
+    print(f"  -> [DATA PREP] Tratando e preparando os dados da tabela: {GOLD_TABLE_METADATA['analysis_per_month_per_color']['table']}")
 
     df_gold_groupping = df.groupBy("taxi_color", "pickup_time_year_month")\
         .agg( \
@@ -79,18 +79,18 @@ def create_table_gold_analysis_per_month(df):
 
     select_dinamico_expr = [
         F.col(col_name).cast(col_type) 
-        for col_name, col_type in GOLD_TABLE_METADATA["analysis_per_month"]["schema"].items()
+        for col_name, col_type in GOLD_TABLE_METADATA["analysis_per_month_per_color"]["schema"].items()
     ]
     
     df_final_gold_per_month =  df_gold_groupping.select(*select_dinamico_expr)
 
     partition_list_pickup_year_month = [linha["pickup_time_year_month"] for linha in df_gold_groupping.select("pickup_time_year_month").distinct().orderBy("pickup_time_year_month").collect()]
 
-    print(f"  -> [ESCRITA] Salvando partição/ões {partition_list_pickup_year_month} na tabela Gold: {GOLD_TABLE_METADATA['analysis_per_month']['table']}")
+    print(f"  -> [ESCRITA] Salvando partição/ões {partition_list_pickup_year_month} na tabela Gold: {GOLD_TABLE_METADATA['analysis_per_month_per_color']['table']}")
 
     formatted_partitions = ", ".join([f"'{p}'" for p in partition_list_pickup_year_month])
 
-    save_as_table_delta(df_final_gold_per_month, "overwrite", GOLD_TABLE_METADATA['analysis_per_month']['table'], "pickup_time_year_month", formatted_partitions)
+    save_as_table_delta(df_final_gold_per_month, "overwrite", GOLD_TABLE_METADATA['analysis_per_month_per_color']['table'], "pickup_time_year_month", formatted_partitions)
 
 # ==============================================================================
 # ORQUESTRAÇÃO: SILVER TO GOLD
@@ -112,8 +112,8 @@ def process_silver_to_gold(particoes):
 
     # Realizando as chamadas das funções na sequência para processar os dados
     create_table_gold_full_data(df_initial)
-    create_table_gold_analysis_per_hour_per_month(df_initial)
-    create_table_gold_analysis_per_month(df_initial)
+    create_table_gold_analysis_per_hour_per_month_full(df_initial)
+    create_table_gold_analysis_per_month_per_color(df_initial)
 
 
     print("\n=============================================")

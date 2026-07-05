@@ -100,7 +100,7 @@ SILVER_TABLE_RULES_BY_COLOR = {
                 "duracao_minutos_floor > 0",
                 "trip_distance > 0",
                 "duracao_dias < 2",
-                "desvio_absoluto_meses <= 1",
+                "desvio_absoluto_meses = 0",
                 "(passenger_count <= 6 OR passenger_count IS NULL)"
                 ]
             },
@@ -122,7 +122,7 @@ SILVER_TABLE_RULES_BY_COLOR = {
                 "duracao_minutos_floor > 0",
                 "trip_distance > 0",
                 "duracao_dias < 1",
-                "desvio_absoluto_meses <= 1",
+                "desvio_absoluto_meses = 0",
                 "(passenger_count <= 6 OR passenger_count IS NULL)"
                 ]
             }
@@ -146,8 +146,7 @@ TB_GOLD_TAXI_TRIPS_FULL_DATA_SCHEMA = {
         "pickup_time_year_month": "string"
 }
 
-TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_HOUR_PER_MONTH = {
-        "taxi_color": "string",
+TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_HOUR_PER_MONTH_FULL = {
         "pickup_time_hour": "int",
         "total_trips": "int",
         "total_amount": "double",
@@ -159,7 +158,7 @@ TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_HOUR_PER_MONTH = {
         "pickup_time_year_month": "string"
 }
 
-TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_MONTH = {
+TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_MONTH_PER_COLOR = {
         "taxi_color": "string",
         "total_trips": "int",
         "total_amount": "double",
@@ -177,14 +176,14 @@ GOLD_TABLE_METADATA = {
                 "table": "nyc_taxi.gold.tb_gold_taxi_trips_full_data", 
                 "schema": TB_GOLD_TAXI_TRIPS_FULL_DATA_SCHEMA
              },
-        "analysis_per_hour_per_month": 
+        "analysis_per_hour_per_month_full": 
             {
                 "table": "nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month", 
-                "schema": TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_HOUR_PER_MONTH
+                "schema": TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_HOUR_PER_MONTH_FULL
             },
         "analysis_per_month": 
             {
-                "table": "nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month", 
-                "schema": TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_MONTH
+                "table": "nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month_per_color", 
+                "schema": TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_MONTH_PER_COLOR
             },
     }

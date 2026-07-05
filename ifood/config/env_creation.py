@@ -213,11 +213,10 @@ PARTITIONED BY (pickup_time_year_month);
 spark.sql(query_gold_taxi_trips_full_data)
 print("Table tb_gold_taxi_trips_full_data successfully created.\n")
 
-### Table: tb_gold_taxi_trips_analysis_per_hour_per_month
-print("Initiating Gold table tb_gold_taxi_trips_analysis_per_hour_per_month creation")
-query_gold_taxi_trips_analysis_per_hour_per_month = """
-CREATE TABLE IF NOT EXISTS nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month (
-    taxi_color STRING COMMENT 'Identifier for the taxi color: yellow or green.',
+### Table: nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month_full
+print("Initiating Gold table nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month_full creation")
+query_gold_taxi_trips_analysis_per_hour_per_month_full = """
+CREATE TABLE IF NOT EXISTS nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month_full (
     pickup_time_hour INT COMMENT 'The hour component extracted from the pickup_datetime.',
     total_trips INT COMMENT 'Count of all trips taken in the universe of analysis.',
     total_amount DOUBLE COMMENT 'Sum of all the amount charged of all trips taken in the universe of analysis.',
@@ -229,16 +228,16 @@ CREATE TABLE IF NOT EXISTS nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_pe
     pickup_time_year_month STRING COMMENT 'The year and month component extracted from the pickup datetime.'
 )
 USING DELTA
-COMMENT 'Refined gold table containing unified yellow and green taxi trip data for grouped analysis. Stores by the combination of taxi color, the hour of the pickup_time and the year and month of the pickup_time insightful data about the amount charged (total and average) and number of passengers carried (total, average per trip considering only trips with recorded passenger count and average per trip considering all trips).'
+COMMENT 'Refined gold table containing unified yellow and green taxi trip data for grouped analysis. Stores by the combination of hour of the pickup_time and the year and month of the pickup_time insightful data about the amount charged (total and average) and number of passengers carried (total, average per trip considering only trips with recorded passenger count and average per trip considering all trips).'
 PARTITIONED BY (pickup_time_year_month);
 """
-spark.sql(query_gold_taxi_trips_analysis_per_hour_per_month)
-print("Table tb_gold_taxi_trips_analysis_per_hour_per_month successfully created.\n")
+spark.sql(query_gold_taxi_trips_analysis_per_hour_per_month_full)
+print("Table tb_gold_taxi_trips_analysis_per_hour_per_month_full successfully created.\n")
 
-### Table: tb_gold_taxi_trips_analysis_per_hour_per_month
-print("Initiating Gold table tb_gold_taxi_trips_analysis_per_month creation")
-query_gold_taxi_trips_analysis_per_month = """
-CREATE TABLE IF NOT EXISTS nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month (
+### Table: tb_gold_taxi_trips_analysis_per_month_per_color
+print("Initiating Gold table tb_gold_taxi_trips_analysis_per_month_per_color creation")
+query_gold_taxi_trips_analysis_per_month_per_color = """
+CREATE TABLE IF NOT EXISTS nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month_per_color (
     taxi_color STRING COMMENT 'Identifier for the taxi color: yellow or green.',
     total_trips INT COMMENT 'Count of all trips taken in the universe of analysis.',
     total_amount DOUBLE COMMENT 'Sum of all the amount charged of all trips taken in the universe of analysis.',
@@ -250,11 +249,11 @@ CREATE TABLE IF NOT EXISTS nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month (
     pickup_time_year_month STRING COMMENT 'The year and month component extracted from the pickup datetime.'
 )
 USING DELTA
-COMMENT 'Refined gold table containing unified yellow and green taxi trip data for grouped analysis. Stores by the combination of taxi color and the year and month of the pickup_time insightful data about the amount charged (total and average) and number of passengers carried (total, average per trip considering only trips with recorded passenger count and average per trip considering all trips).'
+COMMENT 'Refined gold table containing yellow and green taxi trip data for grouped analysis per month and per color. Stores by the combination of taxi color and the year and month of the pickup_time insightful data about the amount charged (total and average) and number of passengers carried (total, average per trip considering only trips with recorded passenger count and average per trip considering all trips).'
 PARTITIONED BY (pickup_time_year_month);
 """
-spark.sql(query_gold_taxi_trips_analysis_per_month)
-print("Table tb_gold_taxi_trips_analysis_per_month successfully created.\n")
+spark.sql(query_gold_taxi_trips_analysis_per_month_per_color)
+print("Table tb_gold_taxi_trips_analysis_per_month_per_color successfully created.\n")
 
 
 
