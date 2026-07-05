@@ -50,7 +50,6 @@ def get_runtime_parameters(ano_mes_override=None):
 
     # Tratamento e geração da lista final
     year_month_list = [ano_mes.strip() for ano_mes in str(ano_mes_raw).split(",")]
-    print(f"Argumentos: {args}")
 
     return year_month_list
 

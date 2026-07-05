@@ -6,12 +6,6 @@ import time
 from datetime import datetime
 # Fim: importações de pacotes e ferramentas necessárias
 
-# Inicio: Garantir que o código encontre as pastas de config necessárias
-# folder_path = os.path.abspath('..')
-# if folder_path not in sys.path:
-#     sys.path.append(folder_path)
-# Fim: Garantir que o código encontre as pastas de config necessárias
-
 # 2. Importa os módulos necessários
 from config.functions import get_runtime_parameters, time_log_metrics
 from src.ingestion_to_landing import download_landing_data
