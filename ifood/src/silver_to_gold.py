@@ -28,7 +28,7 @@ def create_table_gold_full_data(df):
     save_as_table_delta(df_final_gold, "overwrite", GOLD_TABLE_METADATA["full_analysis"]["table"], "pickup_time_year_month", formatted_partitions)
 
 
-def create_table_gold_analysis_per_hour_per_month_full_full(df):
+def create_table_gold_analysis_per_hour_per_month_full(df):
     """
     Função que realiza as transformações e agrupamentos para criar a tabela nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month_full_full
     """
