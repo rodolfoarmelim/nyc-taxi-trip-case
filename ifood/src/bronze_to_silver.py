@@ -132,7 +132,7 @@ def process_bronze_to_silver(particoes, cor_override=None):
     df_final_silver = dfs_to_union[0].unionByName(dfs_to_union[1])
 
     # 4. Gravação Otimizada na Tabela Silver (Overwrite + replaceWhere)
-    print(f"  -> [ESCRITA] Salvando partição/ões {particoes} na tabela Silver: {SILVER_TABLE_METADATA["table"]}")
+    print(f"  -> [ESCRITA] Salvando partição/ões {particoes} na tabela Silver: {SILVER_TABLE_METADATA['table']}")
 
     formatted_partitions = ", ".join([f"'{p}'" for p in particoes])
 
