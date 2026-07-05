@@ -37,7 +37,7 @@ def create_table_gold_analysis_per_hour_per_month_full(df):
     df_gold_groupping = df.groupBy("taxi_color", "pickup_time_year_month", "pickup_time_hour")\
         .agg( \
             F.count("*").alias("total_trips"),
-            F.round(F.sum("total_amount"),2).alias("total_amount"),
+            F.round(F.sum("total_amount"),2).alias("total_amount_sum"),
             F.round(F.avg("total_amount"),2).alias("avg_amount"),
             F.sum("passenger_count").alias("total_passengers"),
             F.round(F.avg(F.when(F.col("is_passenger_count_recorded") == True, F.col("passenger_count")).otherwise(None)),2).alias('avg_passengers_count_with_recorded_data'),
@@ -69,7 +69,7 @@ def create_table_gold_analysis_per_month_per_color(df):
     df_gold_groupping = df.groupBy("taxi_color", "pickup_time_year_month")\
         .agg( \
             F.count("*").alias("total_trips"),
-            F.round(F.sum("total_amount"),2).alias("total_amount"),
+            F.round(F.sum("total_amount"),2).alias("total_amount_sum"),
             F.round(F.avg("total_amount"),2).alias("avg_amount"),
             F.sum("passenger_count").alias("total_passengers"),
             F.round(F.avg(F.when(F.col("is_passenger_count_recorded") == True, F.col("passenger_count")).otherwise(None)),2).alias('avg_passengers_count_with_recorded_data'),

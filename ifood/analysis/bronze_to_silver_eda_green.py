@@ -384,7 +384,7 @@ df_consolidado = (df_resumo_pickup
 # 5. Exibe a tabela comparativa final
 display(df_consolidado)
 
-##### Temos grande parte dos casos armazenados onde a diferença entre os meses é de apenas 1. Vamos considerar o dropoff para sermos mais assertivos e remover casos onde a diferença de meses entre o arquivo e a data de dropoff é superior a 1 mês
+##### Temos grande parte dos casos armazenados onde a diferença entre os meses é nula, com alguns casos de 1. Vamos considerar o dropoff para sermos mais assertivos e remover casos onde a diferença de meses entre o arquivo e a data de dropoff é superior a 0, ou seja, itens que não são do mesmo mês
 
 # COMMAND ----------
 
@@ -395,7 +395,7 @@ display(df_consolidado)
 # MAGIC - Remover viagens onde a duração em minutos é <= 0 (corridas muito rápidas)
 # MAGIC - Remover viagens onde a duração da corrida é >= 1 dias
 # MAGIC - Remover viagens Trip distance <= 0
-# MAGIC - Remover viagens na qual a diferença absoluta entre os meses da referência do arquivo e data de dropoff > 1
+# MAGIC - Remover viagens na qual a diferença absoluta entre os meses da referência do arquivo e data de dropoff > 0
 # MAGIC - Remover viagens em que o a contagem de passageiro é superior a 6 (brecha pelo volume encontrado)
 # MAGIC
 # MAGIC ##### Porque não remover casos de passenger count nulo ou 0?
@@ -868,7 +868,7 @@ print(f"-> Retenção Total: {(volume_final / volume_original) * 100:.2f}% dos d
 # MAGIC
 # MAGIC - **Distância Nula ou Negativa:** Remoção de viagens com trip_distance <= 0.
 # MAGIC
-# MAGIC - **Desvios Temporais (Vazamento de Partição):** Remoção de registros onde a diferença absoluta entre o mês/ano de referência do arquivo e a data real de dropoff seja > 1 mês.
+# MAGIC - **Desvios Temporais (Vazamento de Partição):** Remoção de registros onde a diferença absoluta entre o mês/ano de referência do arquivo e a data real de dropoff seja > 0
 # MAGIC
 # MAGIC **Tratamento da Variável passenger_count**
 # MAGIC Existem inúmeras viagens na base que não reportaram a quantidade de passageiros (passenger_count nulo ou igual a 0), mas que apresentam dados financeiros (total_amount) positivos e perfeitamente válidos. Como a premissa do projeto é utilizar o total_amount como fonte da verdade para o faturamento, essas viagens não serão removidas. Em vez disso, será criada uma coluna de flag (sinalizador) para identificar se a corrida teve passageiros reportados ou não, preservando a integridade financeira do dataset.

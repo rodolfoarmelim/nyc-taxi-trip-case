@@ -219,7 +219,7 @@ query_gold_taxi_trips_analysis_per_hour_per_month_full = """
 CREATE TABLE IF NOT EXISTS nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month_full (
     pickup_time_hour INT COMMENT 'The hour component extracted from the pickup_datetime.',
     total_trips INT COMMENT 'Count of all trips taken in the universe of analysis.',
-    total_amount DOUBLE COMMENT 'Sum of all the amount charged of all trips taken in the universe of analysis.',
+    total_amount_sum DOUBLE COMMENT 'Sum of all the amount charged of all trips taken in the universe of analysis.',
     avg_amount DOUBLE COMMENT 'Average amount charged per trip in the universe of analysis.',
     total_passengers INT COMMENT 'Full amount of passengers carried in all the trips in the universe of analysis.',
     avg_passengers_count_with_recorded_data DOUBLE COMMENT 'Average number of passengers carried per trip in the universe of analysis considering only the trips with passager count recorded (null or different of zero).',
@@ -240,7 +240,7 @@ query_gold_taxi_trips_analysis_per_month_per_color = """
 CREATE TABLE IF NOT EXISTS nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month_per_color (
     taxi_color STRING COMMENT 'Identifier for the taxi color: yellow or green.',
     total_trips INT COMMENT 'Count of all trips taken in the universe of analysis.',
-    total_amount DOUBLE COMMENT 'Sum of all the amount charged of all trips taken in the universe of analysis.',
+    total_amount_sum DOUBLE COMMENT 'Sum of all the amount charged of all trips taken in the universe of analysis.',
     avg_amount DOUBLE COMMENT 'Average amount charged per trip in the universe of analysis.',
     total_passengers INT COMMENT 'Full amount of passengers carried in all the trips in the universe of analysis.',
     avg_passengers_count_with_recorded_data DOUBLE COMMENT 'Average number of passengers carried per trip in the universe of analysis considering only the trips with passager count recorded (null or different of zero).',

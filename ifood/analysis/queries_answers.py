@@ -42,14 +42,14 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##### ii. Usando a tabela agregada (tb_gold_taxi_trips_analysis_per_month)
+# MAGIC ##### ii. Usando a tabela agregada (tb_gold_taxi_trips_analysis_per_month_per_color)
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC SELECT
-# MAGIC      ROUND(AVG(total_amount),2) AS MEDIA_FATURAMENTO_MENSAL 
-# MAGIC FROM nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month
+# MAGIC      ROUND(AVG(total_amount_sum),2) AS MEDIA_FATURAMENTO_MENSAL 
+# MAGIC FROM nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month_per_color
 # MAGIC WHERE taxi_color = 'yellow'
 # MAGIC
 
@@ -77,7 +77,7 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##### ii. Usando a tabela agregada (tb_gold_taxi_trips_analysis_per_month)
+# MAGIC ##### ii. Usando a tabela agregada (tb_gold_taxi_trips_analysis_per_month_per_color)
 
 # COMMAND ----------
 
@@ -85,7 +85,7 @@
 # MAGIC SELECT
 # MAGIC     pickup_time_year_month,
 # MAGIC     avg_amount AS MEDIA_FATURAMENTO_POR_VIAGEM
-# MAGIC FROM nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month
+# MAGIC FROM nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_month_per_color
 # MAGIC WHERE taxi_color = 'yellow'
 # MAGIC ORDER BY 1 ASC
 
@@ -126,7 +126,7 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##### ii. Usando a tabela agregada (tb_gold_taxi_trips_analysis_per_hour_per_month)
+# MAGIC ##### ii. Usando a tabela agregada (tb_gold_taxi_trips_analysis_per_hour_per_month_full)
 
 # COMMAND ----------
 
@@ -135,7 +135,7 @@
 # MAGIC     pickup_time_year_month,
 # MAGIC     pickup_time_hour,
 # MAGIC     avg_passengers_count_with_recorded_data AS MEDIA_PASSAGEIROS_POR_VIAGEM
-# MAGIC FROM nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month
+# MAGIC FROM nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month_full
 # MAGIC WHERE
 # MAGIC     pickup_time_year_month = '2023-05'
 # MAGIC ORDER BY 1 ASC, 2 ASC
@@ -167,7 +167,7 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##### ii. Usando a tabela agregada (tb_gold_taxi_trips_analysis_per_hour_per_month)
+# MAGIC ##### ii. Usando a tabela agregada (tb_gold_taxi_trips_analysis_per_hour_per_month_full)
 
 # COMMAND ----------
 
@@ -176,7 +176,7 @@
 # MAGIC     pickup_time_year_month,
 # MAGIC     pickup_time_hour,
 # MAGIC     avg_passengers_count_all_data AS MEDIA_PASSAGEIROS_POR_VIAGEM
-# MAGIC FROM nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month
+# MAGIC FROM nyc_taxi.gold.tb_gold_taxi_trips_analysis_per_hour_per_month_full
 # MAGIC WHERE
 # MAGIC     pickup_time_year_month = '2023-05'
 # MAGIC ORDER BY 1 ASC, 2 ASC

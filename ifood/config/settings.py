@@ -149,7 +149,7 @@ TB_GOLD_TAXI_TRIPS_FULL_DATA_SCHEMA = {
 TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_HOUR_PER_MONTH_FULL = {
         "pickup_time_hour": "int",
         "total_trips": "int",
-        "total_amount": "double",
+        "total_amount_sum": "double",
         "avg_amount": "double",
         "total_passengers": "int",
         "avg_passengers_count_with_recorded_data": "double",
@@ -161,7 +161,7 @@ TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_HOUR_PER_MONTH_FULL = {
 TB_GOLD_TAXI_TRIPS_ANALYSIS_PER_MONTH_PER_COLOR = {
         "taxi_color": "string",
         "total_trips": "int",
-        "total_amount": "double",
+        "total_amount_sum": "double",
         "avg_amount": "double",
         "total_passengers": "int",
         "avg_passengers_count_with_recorded_data": "double",
