@@ -1,11 +1,9 @@
 import sys
 import os
 
-diretorio_atual = os.path.dirname(os.path.abspath(__file__))
-raiz_projeto = os.path.abspath(os.path.join(diretorio_atual, '..'))
-
-if raiz_projeto not in sys.path:
-    sys.path.append(raiz_projeto)
+folder_path = os.path.abspath('..')
+if folder_path not in sys.path:
+    sys.path.append(folder_path)
 
 from config.functions import get_runtime_parameters
 from src.landing_to_bronze import process_landing_to_bronze

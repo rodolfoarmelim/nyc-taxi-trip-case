@@ -3,11 +3,9 @@ import os
 
 # --- TRAVA DE CAMINHO (À prova de falhas) ---
 # Descobre a pasta atual (execution) e sobe um nível (..) para a raiz do projeto
-diretorio_atual = os.path.dirname(os.path.abspath(__file__))
-raiz_projeto = os.path.abspath(os.path.join(diretorio_atual, '..'))
-
-if raiz_projeto not in sys.path:
-    sys.path.append(raiz_projeto)
+folder_path = os.path.abspath('..')
+if folder_path not in sys.path:
+    sys.path.append(folder_path)
 # ---------------------------------------------
 
 # Agora os imports funcionam de forma limpa!
