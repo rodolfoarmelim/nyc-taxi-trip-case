@@ -1,19 +1,16 @@
-# Databricks notebook source
 import sys
 import os
 
-# COMMAND ----------
+diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+raiz_projeto = os.path.abspath(os.path.join(diretorio_atual, '..'))
 
-# Importando da raiz do projeto nativamente
+if raiz_projeto not in sys.path:
+    sys.path.append(raiz_projeto)
+
 from config.functions import get_runtime_parameters
 from src.silver_to_gold import process_silver_to_gold
 
-# COMMAND ----------
-
-# Capturando parâmetros e executando
-particoes = get_runtime_parameters()
-process_silver_to_gold(particoes)
-
-# COMMAND ----------
-# MAGIC %md
-# MAGIC ### ✅ Transformação Silver -> Gold finalizada com sucesso!
+if __name__ == "__main__":
+    print("Iniciando Job: Silver to Gold...")
+    particoes = get_runtime_parameters()
+    process_silver_to_gold(particoes)

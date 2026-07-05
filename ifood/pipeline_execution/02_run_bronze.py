@@ -1,12 +1,16 @@
-# Databricks notebook source
+import sys
+import os
+
+diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+raiz_projeto = os.path.abspath(os.path.join(diretorio_atual, '..'))
+
+if raiz_projeto not in sys.path:
+    sys.path.append(raiz_projeto)
+
 from config.functions import get_runtime_parameters
 from src.landing_to_bronze import process_landing_to_bronze
 
-# COMMAND ----------
-
-particoes = get_runtime_parameters()
-process_landing_to_bronze(particoes)
-
-# COMMAND ----------
-# MAGIC %md
-# MAGIC ### Execução finalizada com sucesso!
+if __name__ == "__main__":
+    print("Iniciando Job: Landing to Bronze...")
+    particoes = get_runtime_parameters()
+    process_landing_to_bronze(particoes)
