@@ -85,8 +85,8 @@ def apply_silver_transformations(spark, table_source, color, particoes):
              .otherwise(F.lit(False))
         )
         .withColumn("dt_ingestion", F.current_timestamp())
-        .withColumn("pickup_time_year_month",  F.date_format(pickup_col, "yyyy-MM"))
-        .withColumn("dropoff_time_year_month", F.date_format(dropoff_col, "yyyy-MM"))
+        .withColumn("pickup_time_year_month",  F.date_format(F.col("pickup_datetime"), "yyyy-MM"))
+        .withColumn("dropoff_time_year_month", F.date_format(F.col("dropoff_datetime"), "yyyy-MM"))
         )
 
     # 7. Projeção Dinâmica e Tipagem Forte (Schema Enforcement)
